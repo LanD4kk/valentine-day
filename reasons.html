@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reasons Why I Love You</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Dancing Script', 'cursive'] },
+                    colors: {
+                        rose: { 400: '#fb7185', 500: '#f43f5e', 600: '#e11d48' },
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- 3D FLIP ANIMATION LOGIC --- */
+
+        /* 1. Perspective: Memberikan efek kedalaman 3D pada container */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        /* 2. Transform Style: Memastikan elemen anak tetap dalam ruang 3D */
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+
+        /* 3. Backface Visibility: Menyembunyikan sisi belakang kartu saat dibalik */
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            /* Safari support */
+        }
+
+        /* 4. Class untuk memutar kartu 180 derajat */
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Fade-in animation */
+        .fade-in {
+            animation: fadeIn 1.5s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hidden-text {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="bg-brand-50 min-h-screen font-sans py-12 px-4 flex flex-col items-center">
+
+    <div class="text-center mb-10 max-w-lg">
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-3">reason why i Love u</h1>
+        <p class="text-slate-500">Tap a card to reveal a secret.</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#1</span>
+                </div>
+
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        u always be there for me
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#2</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        u always make me laugh even when i'm sad
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#3</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        Your terrible jokes that make me laugh anyway
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#4</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        You make me feel safe whenever I'm with you
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#5</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        Your smile lights up my whole world
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#6</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        How you always know when something is wrong
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#7</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        You believe in me even when I don't
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#8</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        Every moment with you feels like home
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#9</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        the way u smile
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#10</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        tingkah lucu dan konyol kamu
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#11</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        kamu yang selalu berusaha untuk mengerti aku
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="perspective-1000 w-full h-48 cursor-pointer group" onclick="flipCard(this)">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold">#12</span>
+                </div>
+                <div
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-rose-100 rounded-xl flex items-center justify-center p-4 backface-hidden rotate-y-180">
+                    <p class="text-slate-700 font-medium text-sm md:text-base">
+                        kepedulian kamu ke aku
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Wide Final Card -->
+    <div class="w-full max-w-4xl mt-8">
+        <div class="perspective-1000 w-full h-48 cursor-pointer" onclick="showFinalMessage()" id="finalCard">
+            <div
+                class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
+                <div
+                    class="absolute inset-0 w-full h-full bg-gradient-to-r from-rose-500 to-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    <span class="text-white text-4xl font-bold"> Last reason </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden message that fades in -->
+        <div id="finalMessage" class="hidden-text mt-8 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-800">
+                and last, i love u the way u are
+            </h2>
+        </div>
+    </div>
+
+    <div class="text-center mt-12">
+        <a href="journey.html"
+            class="inline-block bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 px-8 rounded-full transition-all hover:scale-105 shadow-lg">
+            Back to Our Story
+        </a>
+    </div>
+
+    <script>
+        function flipCard(element) {
+            const card = element.querySelector('div.relative');
+            card.classList.toggle('rotate-y-180');
+        }
+
+        function showFinalMessage() {
+            const finalCard = document.getElementById('finalCard');
+            const finalMessage = document.getElementById('finalMessage');
+
+            // Fade out the card
+            finalCard.style.transition = 'opacity 0.8s ease-out';
+            finalCard.style.opacity = '0';
+
+            // After card fades, show the message with fade-in
+            setTimeout(() => {
+                finalCard.style.display = 'none';
+                finalMessage.classList.remove('hidden-text');
+                finalMessage.classList.add('fade-in');
+            }, 800);
+        }
+    </script>
+</body>
+
+</html>

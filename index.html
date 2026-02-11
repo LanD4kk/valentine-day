@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Proposal</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e', // Rose-500
+                            600: '#e11d48', // Rose-600
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Import cursive font */
+        body {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Text shadow with dark red */
+        .text-shadow-red {
+            text-shadow: 3px 3px 6px rgba(139, 0, 0, 0.6);
+        }
+
+        /* Floating animation for the image */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Smooth transition for the moving button */
+        #noBtn {
+            transition: all 0.1s ease;
+            /* Faster transition makes it feel more "slippery" */
+        }
+    </style>
+</head>
+
+<body class="bg-brand-50 flex flex-col h-screen justify-center items-center overflow-hidden select-none">
+
+    <div class="max-w-sm w-full mx-4 text-center z-10 relative">
+
+        <div id="imageContainer" class="mb-6">
+            <img src="cutebear.gif" alt="Cute Bear" class="w-40 h-40 mx-auto object-contain float-animation">
+        </div>
+
+        <h1 id="mainTitle" class="text-5xl font-bold mb-4 text-shadow-red" style="color: #8B0000;">Will you be my
+            Valentine?</h1>
+        <p id="subTitle" class="mb-8 text-2xl text-shadow-red" style="color: #8B0000;">I promise to be a good boyfie
+            ever.</p>
+
+        <div class="flex flex-col md:flex-row gap-4 justify-center items-center relative h-12">
+
+            <button id="yesBtn" onclick="acceptProposal()"
+                class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-10 rounded-full transition-transform transform active:scale-95 w-full md:w-auto text-xl"
+                style="box-shadow: 0 4px 12px rgba(139, 0, 0, 0.5);">
+                Yes, absolutely!
+            </button>
+
+            <button id="noBtn"
+                class="bg-slate-100 text-slate-700 font-bold py-3 px-10 rounded-full hover:bg-slate-200 w-full md:w-auto md:absolute md:right-[-120px] text-xl"
+                style="box-shadow: 0 4px 12px rgba(139, 0, 0, 0.4);">
+                No
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const mainTitle = document.getElementById('mainTitle');
+        const subTitle = document.getElementById('subTitle');
+        const imageContainer = document.getElementById('imageContainer');
+
+        // Logic to move the "No" button
+        function moveButton() {
+            // Get viewport dimensions
+            const maxWidth = window.innerWidth - noBtn.offsetWidth - 20;
+            const maxHeight = window.innerHeight - noBtn.offsetHeight - 20;
+
+            // Generate random coordinates
+            const randomX = Math.random() * maxWidth;
+            const randomY = Math.random() * maxHeight;
+
+            // Apply new position (using fixed positioning to break out of the flex container)
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // Event Listeners for "No" Button
+        noBtn.addEventListener('mouseover', moveButton); // Desktop
+        noBtn.addEventListener('touchstart', (e) => {   // Mobile
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Logic for "Yes" Button
+        function acceptProposal() {
+            // 1. Trigger Confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#f43f5e', '#ec4899', '#8b5cf6']
+            });
+
+            // 2. Change Content
+            mainTitle.innerText = "Yeaaay! i know u will say yes";
+            subTitle.innerText = "Tekan tombol dibawah ini yaa";
+
+            // Change image to a happy one
+            imageContainer.innerHTML = `
+                <img src="happybear.gif" 
+                     class="w-40 h-40 mx-auto object-contain float-animation">
+            `;
+
+            // 3. Hide Buttons
+            yesBtn.style.display = 'none';
+            noBtn.style.display = 'none';
+
+            // 4. Add navigation button to journey page
+            const buttonContainer = document.querySelector('.flex.flex-col.md\\:flex-row');
+            buttonContainer.innerHTML = `
+                <a href="journey.html" 
+                   class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-10 rounded-full transition-transform transform hover:scale-105 w-full md:w-auto text-xl"
+                   style="box-shadow: 0 4px 12px rgba(139, 0, 0, 0.5);">
+                    KLIK INI!!!!
+                </a>
+            `;
+
+
+            // Optional: Continuous confetti for a few seconds
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#f43f5e', '#ec4899']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#f43f5e', '#ec4899']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+
+</html>
