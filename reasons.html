@@ -11,6 +11,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- Music Player Styles -->
+    <link rel="stylesheet" href="music-player.css">
+
+    <!-- Music Player Script -->
+    <script src="music-player.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -85,6 +91,28 @@
         Your browser does not support the audio element.
     </audio>
 
+    <!-- Music Player Controls -->
+    <div class="music-player">
+        <button id="playPauseBtn" class="play-pause-btn" title="Play/Pause">
+            <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+            </svg>
+            <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor" style="display: none;">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+            </svg>
+        </button>
+
+        <div class="timeline-container">
+            <span id="currentTime" class="time-display">0:00</span>
+            <div id="timeline" class="timeline">
+                <div id="timelineProgress" class="timeline-progress"></div>
+            </div>
+            <span id="duration" class="time-display">0:00</span>
+        </div>
+    </div>
+
     <div class="text-center mb-10 max-w-lg">
         <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-3">reason why i Love u</h1>
         <p class="text-slate-500">Tap a card to reveal a secret.</p>
@@ -130,7 +158,7 @@
             <div
                 class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
                 <div
-                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
                     <span class="text-white text-4xl font-bold">#3</span>
                 </div>
                 <div
@@ -146,7 +174,7 @@
             <div
                 class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
                 <div
-                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
                     <span class="text-white text-4xl font-bold">#4</span>
                 </div>
                 <div
@@ -194,7 +222,7 @@
             <div
                 class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
                 <div
-                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
                     <span class="text-white text-4xl font-bold">#7</span>
                 </div>
                 <div
@@ -210,7 +238,7 @@
             <div
                 class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
                 <div
-                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
                     <span class="text-white text-4xl font-bold">#8</span>
                 </div>
                 <div
@@ -226,7 +254,7 @@
             <div
                 class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
                 <div
-                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
+                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
                     <span class="text-white text-4xl font-bold">#9</span>
                 </div>
                 <div
@@ -242,7 +270,7 @@
             <div
                 class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
                 <div
-                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
                     <span class="text-white text-4xl font-bold">#10</span>
                 </div>
                 <div
@@ -258,7 +286,7 @@
             <div
                 class="relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-xl">
                 <div
-                    class="absolute inset-0 w-full h-full bg-rose-500 rounded-xl flex items-center justify-center backface-hidden">
+                    class="absolute inset-0 w-full h-full bg-rose-400 rounded-xl flex items-center justify-center backface-hidden">
                     <span class="text-white text-4xl font-bold">#11</span>
                 </div>
                 <div
@@ -308,7 +336,11 @@
         </div>
     </div>
 
-    <div class="text-center mt-12">
+    <div class="text-center mt-12 flex flex-col md:flex-row gap-4 justify-center items-center">
+        <a href="scrapbook.html"
+            class="inline-block bg-rose-500 hover:bg-rose-600 text-white font-medium py-3 px-8 rounded-full transition-all hover:scale-105 shadow-lg">
+            📖 View Our Scrapbook
+        </a>
         <a href="journey.html"
             class="inline-block bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 px-8 rounded-full transition-all hover:scale-105 shadow-lg">
             Back to Our Story
@@ -319,19 +351,19 @@
         // Music Management - Continue from localStorage
         const bgMusic = document.getElementById('bgMusic');
         let musicPlaying = false;
-        
+
         // Check if music should continue from localStorage
         const musicStarted = localStorage.getItem('valentine_music_started');
         const savedTime = localStorage.getItem('valentine_music_time');
-        
+
         if (musicStarted === 'true') {
             if (savedTime) {
                 bgMusic.currentTime = parseFloat(savedTime);
             }
-            
+
             // Try to resume playback
             const playPromise = bgMusic.play();
-            
+
             if (playPromise !== undefined) {
                 playPromise.then(() => {
                     musicPlaying = true;
@@ -351,7 +383,7 @@
         } else {
             // If music hasn't been started yet, try to start it now
             const playPromise = bgMusic.play();
-            
+
             if (playPromise !== undefined) {
                 playPromise.then(() => {
                     musicPlaying = true;
@@ -414,6 +446,11 @@
                 finalMessage.classList.add('fade-in');
             }, 800);
         }
+
+        // Initialize music player controls after everything is loaded
+        window.addEventListener('DOMContentLoaded', () => {
+            initMusicPlayer(bgMusic);
+        });
     </script>
 </body>
 

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Our Scrapbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Music Player Styles -->
+    <link rel="stylesheet" href="music-player.css">
+
+    <!-- Music Player Script -->
+    <script src="music-player.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Dancing Script', 'cursive'] },
+                    colors: {
+                        rose: { 400: '#fb7185', 500: '#f43f5e', 600: '#e11d48' },
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .scrapbook-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .flipbook-wrapper {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            background: #f8f9fa;
+        }
+
+        .flipbook-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+            background: rgba(30, 41, 59, 0.95);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Rotate device overlay - only show on mobile portrait */
+        .rotate-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .rotate-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: rotate 2s ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-15deg);
+            }
+
+            75% {
+                transform: rotate(15deg);
+            }
+        }
+
+        /* Show rotate overlay on mobile portrait mode */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .rotate-overlay {
+                display: flex;
+            }
+
+            .scrapbook-container {
+                display: none;
+            }
+
+            .back-button {
+                display: none;
+            }
+        }
+
+        /* Optimize for landscape */
+        @media (orientation: landscape) {
+            .header-section {
+                padding: 0.5rem 1rem;
+            }
+
+            .header-section h1 {
+                font-size: 1.5rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .header-section p {
+                font-size: 0.875rem;
+            }
+
+            .back-button {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Desktop styles */
+        @media (min-width: 769px) {
+            .header-section h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading animation */
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #f43f5e;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="valentine-song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Music Player Controls -->
+    <div class="music-player">
+        <button id="playPauseBtn" class="play-pause-btn" title="Play/Pause">
+            <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+            </svg>
+            <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor" style="display: none;">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+            </svg>
+        </button>
+
+        <div class="timeline-container">
+            <span id="currentTime" class="time-display">0:00</span>
+            <div id="timeline" class="timeline">
+                <div id="timelineProgress" class="timeline-progress"></div>
+            </div>
+            <span id="duration" class="time-display">0:00</span>
+        </div>
+    </div>
+
+    <!-- Rotate Device Overlay (Mobile Portrait Only) -->
+    <div class="rotate-overlay">
+        <div class="rotate-icon">📱 ↻</div>
+        <h2 class="text-3xl font-bold text-slate-800 mb-4">Please Rotate Your Device</h2>
+        <p class="text-lg text-slate-600 mb-2">For the best scrapbook experience</p>
+        <p class="text-base text-slate-500">Turn your phone to landscape mode</p>
+        <p class="text-base text-slate-500 mt-4">to view 2 pages at once 📖</p>
+    </div>
+
+    <div class="scrapbook-container">
+        <!-- Header -->
+        <div class="header-section">
+            <h1 class="text-2xl md:text-4xl font-bold text-slate-800 mb-1">Our Scrapbook 📖</h1>
+            <p class="text-slate-600 text-sm md:text-base">Flip through our precious memories</p>
+        </div>
+
+        <!-- Flipbook Section -->
+        <div class="flipbook-wrapper" id="flipbookWrapper">
+            <!-- Loading indicator -->
+            <div id="loading">
+                <div class="loader"></div>
+                <p class="loading-text">Loading scrapbook...</p>
+            </div>
+
+            <!-- Heyzine Flipbook Embed -->
+            <iframe id="flipbookIframe" class="flipbook-iframe" src="https://heyzine.com/flip-book/34dfde9c46.html"
+                title="Our Scrapbook" allow="fullscreen" allowfullscreen style="display: none;">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <a href="reasons.html" class="back-button">
+        ← Back to Reasons
+    </a>
+
+    <script>
+        // Music Management
+        const bgMusic = document.getElementById('bgMusic');
+        let musicPlaying = false;
+
+        const musicStarted = localStorage.getItem('valentine_music_started');
+        const savedTime = localStorage.getItem('valentine_music_time');
+
+        if (musicStarted === 'true') {
+            if (savedTime) {
+                bgMusic.currentTime = parseFloat(savedTime);
+            }
+
+            const playPromise = bgMusic.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    musicPlaying = true;
+                }).catch(error => {
+                    console.log('Autoplay prevented');
+                    document.addEventListener('click', () => {
+                        if (!musicPlaying) {
+                            bgMusic.play().then(() => {
+                                musicPlaying = true;
+                                localStorage.setItem('valentine_music_started', 'true');
+                            });
+                        }
+                    }, { once: true });
+                });
+            }
+        }
+
+        bgMusic.addEventListener('timeupdate', () => {
+            localStorage.setItem('valentine_music_time', bgMusic.currentTime.toString());
+        });
+
+        // Handle iframe loading
+        const iframe = document.getElementById('flipbookIframe');
+        const loading = document.getElementById('loading');
+
+        // Show iframe when loaded
+        iframe.addEventListener('load', () => {
+            loading.style.display = 'none';
+            iframe.style.display = 'block';
+        });
+
+        // Fallback: Hide loading after 3 seconds even if load event doesn't fire
+        setTimeout(() => {
+            loading.style.display = 'none';
+            iframe.style.display = 'block';
+        }, 3000);
+
+        // Try to request landscape orientation on mobile (optional, not all browsers support this)
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape').catch(err => {
+                console.log('Orientation lock not supported:', err);
+            });
+        }
+
+        // Initialize music player controls after everything is loaded
+        window.addEventListener('DOMContentLoaded', () => {
+            initMusicPlayer(bgMusic);
+        });
+    </script>
+</body>
+
+</html>

@@ -64,6 +64,108 @@
             transition: all 0.1s ease;
             /* Faster transition makes it feel more "slippery" */
         }
+
+        /* Music Player Controls */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .play-pause-btn {
+            background: linear-gradient(135deg, #f43f5e, #ec4899);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(244, 63, 94, 0.3);
+        }
+
+        .play-pause-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.5);
+        }
+
+        .play-pause-btn:active {
+            transform: scale(0.95);
+        }
+
+        .timeline-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline {
+            flex: 1;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #f43f5e, #ec4899);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+            position: relative;
+        }
+
+        .timeline-progress::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 2px solid #f43f5e;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .time-display {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-family: monospace;
+            min-width: 40px;
+        }
+
+        @media (max-width: 640px) {
+            .music-player {
+                padding: 0.5rem 1rem;
+            }
+
+            .play-pause-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .time-display {
+                font-size: 0.7rem;
+            }
+        }
     </style>
 </head>
 
@@ -74,6 +176,28 @@
         <source src="valentine-song.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+
+    <!-- Music Player Controls -->
+    <div class="music-player">
+        <button id="playPauseBtn" class="play-pause-btn" title="Play/Pause">
+            <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+            </svg>
+            <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor" style="display: none;">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+            </svg>
+        </button>
+
+        <div class="timeline-container">
+            <span id="currentTime" class="time-display">0:00</span>
+            <div id="timeline" class="timeline">
+                <div id="timelineProgress" class="timeline-progress"></div>
+            </div>
+            <span id="duration" class="time-display">0:00</span>
+        </div>
+    </div>
 
     <div class="max-w-sm w-full mx-4 text-center z-10 relative">
 
@@ -112,19 +236,19 @@
 
         // Attempt to play music on page load
         let musicPlaying = false;
-        
+
         // Check if music should continue from localStorage
         const musicStarted = localStorage.getItem('valentine_music_started');
         const savedTime = localStorage.getItem('valentine_music_time');
-        
+
         if (musicStarted === 'true' && savedTime) {
             // Resume from saved position
             bgMusic.currentTime = parseFloat(savedTime);
         }
-        
+
         // Try to autoplay or resume
         const playPromise = bgMusic.play();
-        
+
         if (playPromise !== undefined) {
             playPromise.then(() => {
                 // Autoplay started successfully
@@ -165,6 +289,76 @@
         bgMusic.addEventListener('pause', () => {
             localStorage.setItem('valentine_music_playing', 'false');
         });
+
+        // Music Player Controls
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const timeline = document.getElementById('timeline');
+        const timelineProgress = document.getElementById('timelineProgress');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const durationDisplay = document.getElementById('duration');
+
+        // Format time as MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Update play/pause button icon
+        function updatePlayPauseIcon() {
+            if (bgMusic.paused) {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            } else {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            }
+        }
+
+        // Toggle play/pause
+        playPauseBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    localStorage.setItem('valentine_music_started', 'true');
+                    updatePlayPauseIcon();
+                });
+            } else {
+                bgMusic.pause();
+                musicPlaying = false;
+                updatePlayPauseIcon();
+            }
+        });
+
+        // Update timeline as music plays
+        bgMusic.addEventListener('timeupdate', () => {
+            const progress = (bgMusic.currentTime / bgMusic.duration) * 100;
+            timelineProgress.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(bgMusic.currentTime);
+        });
+
+        // Set duration when metadata loads
+        bgMusic.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(bgMusic.duration);
+        });
+
+        // Seek functionality
+        timeline.addEventListener('click', (e) => {
+            const rect = timeline.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const percentage = clickX / width;
+            bgMusic.currentTime = percentage * bgMusic.duration;
+        });
+
+        // Update icon on play/pause events
+        bgMusic.addEventListener('play', updatePlayPauseIcon);
+        bgMusic.addEventListener('pause', updatePlayPauseIcon);
+
+        // Initialize icon state
+        updatePlayPauseIcon();
 
         // Logic to move the "No" button
         function moveButton() {
