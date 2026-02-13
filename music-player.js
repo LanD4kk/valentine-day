@@ -10,6 +10,7 @@ function formatTime(seconds) {
 
 // Initialize music player controls
 function initMusicPlayer(bgMusicElement) {
+  const musicPlayer = document.querySelector(".music-player");
   const playPauseBtn = document.getElementById("playPauseBtn");
   const playIcon = document.getElementById("playIcon");
   const pauseIcon = document.getElementById("pauseIcon");
@@ -17,10 +18,26 @@ function initMusicPlayer(bgMusicElement) {
   const timelineProgress = document.getElementById("timelineProgress");
   const currentTimeDisplay = document.getElementById("currentTime");
   const durationDisplay = document.getElementById("duration");
+  const minimizeBtn = document.getElementById("minimizeBtn");
 
   if (!playPauseBtn || !timeline) {
     console.error("Music player elements not found");
     return;
+  }
+
+  // Check minimized state from localStorage
+  const isMinimized = localStorage.getItem("music_player_minimized") === "true";
+  if (isMinimized && musicPlayer) {
+    musicPlayer.classList.add("minimized");
+  }
+
+  // Minimize/Expand toggle
+  if (minimizeBtn && musicPlayer) {
+    minimizeBtn.addEventListener("click", () => {
+      musicPlayer.classList.toggle("minimized");
+      const minimized = musicPlayer.classList.contains("minimized");
+      localStorage.setItem("music_player_minimized", minimized);
+    });
   }
 
   // Update play/pause button icon
