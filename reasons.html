@@ -342,6 +342,36 @@
                         if (!musicPlaying) {
                             bgMusic.play().then(() => {
                                 musicPlaying = true;
+                                localStorage.setItem('valentine_music_started', 'true');
+                            });
+                        }
+                    }, { once: true });
+                });
+            }
+        } else {
+            // If music hasn't been started yet, try to start it now
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    musicPlaying = true;
+                    localStorage.setItem('valentine_music_started', 'true');
+                }).catch(error => {
+                    console.log('Autoplay prevented, waiting for user interaction');
+                    // Try on first interaction
+                    document.addEventListener('click', () => {
+                        if (!musicPlaying) {
+                            bgMusic.play().then(() => {
+                                musicPlaying = true;
+                                localStorage.setItem('valentine_music_started', 'true');
+                            });
+                        }
+                    }, { once: true });
+                    document.addEventListener('touchstart', () => {
+                        if (!musicPlaying) {
+                            bgMusic.play().then(() => {
+                                musicPlaying = true;
+                                localStorage.setItem('valentine_music_started', 'true');
                             });
                         }
                     }, { once: true });
