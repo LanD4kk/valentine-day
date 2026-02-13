@@ -79,6 +79,12 @@
 
 <body class="bg-brand-50 min-h-screen font-sans py-12 px-4 flex flex-col items-center">
 
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="Jim Brickman - Valentine (Official) ft. Martina McBride.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <div class="text-center mb-10 max-w-lg">
         <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-3">reason why i Love u</h1>
         <p class="text-slate-500">Tap a card to reveal a secret.</p>
@@ -310,6 +316,54 @@
     </div>
 
     <script>
+        // Music Management - Continue from localStorage
+        const bgMusic = document.getElementById('bgMusic');
+        let musicPlaying = false;
+        
+        // Check if music should continue from localStorage
+        const musicStarted = localStorage.getItem('valentine_music_started');
+        const savedTime = localStorage.getItem('valentine_music_time');
+        
+        if (musicStarted === 'true') {
+            if (savedTime) {
+                bgMusic.currentTime = parseFloat(savedTime);
+            }
+            
+            // Try to resume playback
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    musicPlaying = true;
+                }).catch(error => {
+                    console.log('Autoplay prevented on reasons page');
+                    // Try on first interaction
+                    document.addEventListener('click', () => {
+                        if (!musicPlaying) {
+                            bgMusic.play().then(() => {
+                                musicPlaying = true;
+                            });
+                        }
+                    }, { once: true });
+                });
+            }
+        }
+
+        // Save current time periodically to localStorage
+        bgMusic.addEventListener('timeupdate', () => {
+            localStorage.setItem('valentine_music_time', bgMusic.currentTime.toString());
+        });
+
+        // Save playing state
+        bgMusic.addEventListener('play', () => {
+            localStorage.setItem('valentine_music_playing', 'true');
+        });
+
+        bgMusic.addEventListener('pause', () => {
+            localStorage.setItem('valentine_music_playing', 'false');
+        });
+
+        // Card flip functionality
         function flipCard(element) {
             const card = element.querySelector('div.relative');
             card.classList.toggle('rotate-y-180');
